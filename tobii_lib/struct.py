@@ -17,7 +17,7 @@
 from __future__ import print_function
 import array 
 import os
-import matplotlib.pyplot as plt 
+#import matplotlib.pyplot as plt 
 from ctypes import *
 
 TOBIIGAZE_TRACKING_STATUS_NO_EYES_TRACKED = 0
@@ -115,13 +115,19 @@ def on_gaze_data(tobiigaze_gaze_data_ref, tobiigaze_gaze_data_extensions_ref,
     
     print("")
     return 0
+
+print(url)
     
 #Data structures to pass to on_gaze_data
 tobiiGazeCore64 = WinDLL(os.getcwd() + '\\tobii_lib\\TobiiGazeCore64.dll');
-tobiiGazeCore64.tobiigaze_get_connected_eye_tracker(url, URL_SIZE, 
-                                                    None)    
+tobiiGazeCore64.tobiigaze_get_connected_eye_tracker(url, URL_SIZE, None)    
 eye_tracker = c_void_p(tobiiGazeCore64.tobiigaze_create(url, None))
 info = TobiiDeviceInfo()
+
+print(repr(url.value))
+print(info)
+
+print(eye_tracker) # null pointer ???
 tobiiGazeCore64.tobiigaze_run_event_loop_on_internal_thread(eye_tracker, 
                                                                 None, 
                                                                 None)
@@ -172,6 +178,7 @@ def clearData():
     del eye_data_left[:]
     del eye_data_right[:]
 
+'''
 def plot_eye_data(eye_data_left, eye_data_right, left_color, right_color):
     left_x_float = array.array('f', xrange(0, eye_data_left.__len__()))
     left_y_float = array.array('f', xrange(0, eye_data_left.__len__()))
@@ -212,7 +219,8 @@ def plot_eye_data(eye_data_left, eye_data_right, left_color, right_color):
     #mng = plt.get_current_fig_manager()
     #.window.geometry("1920x1080")
     plt.show()
-    
+'''
+
 def grab_x():
     string = ((eye_data_left.pop().split(" ")[2]))
     if isfloat(string):
